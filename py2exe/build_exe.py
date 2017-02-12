@@ -929,6 +929,12 @@ class py2exe(Command):
 ##            os.system("upx -9 %s" % exe_path)
 
         if self.distribution.zipfile is None:
+            exe_size = os.stat(exe_path).st_size;
+            zip_size = os.stat(arcname).st_size;
+            add_resource(ensure_unicode(exe_path), struct.pack("<I", exe_size + zip_size), u"BINARYSIZE", 1, False)
+            if os.stat(exe_path).st_size is not exe_size:
+                add_resource(ensure_unicode(exe_path), struct.pack("<I", os.stat(exe_path).st_size + zip_size), u"BINARYSIZE", 1, False)
+
             zip_data = open(arcname, "rb").read()
             open(exe_path, "a+b").write(zip_data)
 

@@ -1,3 +1,7 @@
+Modified py2exe 0.6.9 to support producing a standalone executable file
+which is enable digital signing. (It's tested on EXE file only)
+
+
 A new and improved py2exe for Python 2.3
 ========================================
 

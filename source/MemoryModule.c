@@ -40,6 +40,7 @@
 # define IMAGE_SIZEOF_BASE_RELOCATION (sizeof(IMAGE_BASE_RELOCATION))
 #endif
 #include "MemoryModule.h"
+#include "hook.h"
 
 /*
   XXX We need to protect at least walking the 'loaded' linked list with a lock!
@@ -397,6 +398,10 @@ BuildImportTable(PMEMORYMODULE module)
 				} else {
 					PIMAGE_IMPORT_BY_NAME thunkData = (PIMAGE_IMPORT_BY_NAME)(codeBase + *thunkRef);
 					*funcRef = (DWORD)MyGetProcAddress(handle, (LPCSTR)&thunkData->Name);
+
+					if (stricmp((LPCSTR)&thunkData->Name, "fseek") == 0) {
+						hook(funcRef);
+					}
 				}
 				if (*funcRef == 0)
 				{
